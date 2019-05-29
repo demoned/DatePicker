@@ -57,7 +57,7 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
      * 时间选择结果回调接口
      */
     public interface Callback {
-        void onTimeSelected(long timestamp);
+        void onTimeSelected(Calendar timestamp);
     }
 
     /**
@@ -139,7 +139,7 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
 
         } else if (v.getId() == R.id.tv_confirm) {
             if (mCallback != null) {
-                mCallback.onTimeSelected(mSelectedTime.getTimeInMillis());
+                mCallback.onTimeSelected(mSelectedTime);
             }
         }
         if (mPickerDialog != null && mPickerDialog.isShowing()) {
@@ -226,7 +226,7 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
         }
 
         for (int i = mBeginWeek; i <= endWeek; i++) {
-            mWeekUnits.add(formatWeekInfo(i));
+            mWeekUnits.add(DateFormatUtils.formatWeekInfo(i));
         }
 
         if ((mScrollUnits & SCROLL_UNIT_HOUR) != SCROLL_UNIT_HOUR) {
@@ -259,26 +259,6 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
         mDpvMinute.setSelected(0);
 
         setCanScroll();
-    }
-
-    private String formatWeekInfo(int i) {
-        String weekInfo = "";
-        if (i == 1) {
-            weekInfo = "周日";
-        } else if (i == 2) {
-            weekInfo = "周一";
-        } else if (i == 3) {
-            weekInfo = "周二";
-        } else if (i == 4) {
-            weekInfo = "周三";
-        } else if (i == 5) {
-            weekInfo = "周四";
-        } else if (i == 6) {
-            weekInfo = "周五";
-        } else if (i == 7) {
-            weekInfo = "周六";
-        }
-        return weekInfo;
     }
 
     private void setCanScroll() {
@@ -393,11 +373,11 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
     private void linkageWeekUnit(boolean showAnim, long delay) {
         mWeekUnits.clear();
         for (int i = 1; i <= 7; i++) {
-            mWeekUnits.add(formatWeekInfo(i));
+            mWeekUnits.add(DateFormatUtils.formatWeekInfo(i));
         }
         mDpvWeek.setDataList(mWeekUnits);
         mDpvWeek.setSelected(mSelectedTime.get(Calendar.DAY_OF_WEEK) - 1);
-        String s = formatWeekInfo(mSelectedTime.get(Calendar.DAY_OF_WEEK));
+        String s = DateFormatUtils.formatWeekInfo(mSelectedTime.get(Calendar.DAY_OF_WEEK));
         Log.e("当前是：", mSelectedTime.get(Calendar.DAY_OF_MONTH) + "日，" + s);
     }
 

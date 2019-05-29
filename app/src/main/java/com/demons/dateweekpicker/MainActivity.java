@@ -8,6 +8,8 @@ import android.widget.TextView;
 import com.demons.picker.CustomDatePicker;
 import com.demons.picker.DateFormatUtils;
 
+import java.util.Calendar;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView mTvSelectedDate, mTvSelectedTime;
@@ -32,12 +34,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.ll_date:
                 // 日期格式为yyyy-MM-dd
-                mDatePicker.show(mTvSelectedDate.getText().toString());
+                mDatePicker.show(mTimestamp.getTimeInMillis());
                 break;
 
             case R.id.ll_time:
                 // 日期格式为yyyy-MM-dd HH:mm
-                mTimerPicker.show(mTvSelectedTime.getText().toString());
+                mTimerPicker.show(mTvTimestamp.getTimeInMillis());
                 break;
         }
     }
@@ -48,19 +50,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mDatePicker.onDestroy();
     }
 
-    private void initDatePicker() {
-        long beginTimestamp = DateFormatUtils.str2Long("2009-05-01", false);
-        long endTimestamp = System.currentTimeMillis();
+    private Calendar mTimestamp = Calendar.getInstance();
 
-        mTvSelectedDate.setText(DateFormatUtils.long2Str(endTimestamp, false));
+    private void initDatePicker() {
+        String beginTime = DateFormatUtils.getMonth(-1);
+        String endTime = DateFormatUtils.getYear(2);
+
+        mTvSelectedDate.setText(DateFormatUtils.formatDateInfo(Calendar.getInstance()));
 
         // 通过时间戳初始化日期，毫秒级别
         mDatePicker = new CustomDatePicker(this, new CustomDatePicker.Callback() {
             @Override
-            public void onTimeSelected(long timestamp) {
-                mTvSelectedDate.setText(DateFormatUtils.long2Str(timestamp, false));
+            public void onTimeSelected(Calendar timestamp) {
+                mTimestamp = timestamp;
+                mTvSelectedDate.setText(DateFormatUtils.formatDateInfo(timestamp));
             }
-        }, beginTimestamp, endTimestamp);
+        }, beginTime, endTime);
         // 不允许点击屏幕或物理返回键关闭
         mDatePicker.setCancelable(false);
         // 不显示时和分
@@ -71,17 +76,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mDatePicker.setCanShowAnim(false);
     }
 
+    private Calendar mTvTimestamp = Calendar.getInstance();
+
     private void initTimerPicker() {
-        String beginTime = "2018-10-17 18:00";
-        String endTime = DateFormatUtils.long2Str(System.currentTimeMillis(), true);
 
-        mTvSelectedTime.setText(endTime);
+        String beginTime = DateFormatUtils.getMonth(-1);
+        String endTime = DateFormatUtils.getYear(2);
 
+        mTvSelectedTime.setText(DateFormatUtils.formatDateInfo(Calendar.getInstance()));
         // 通过日期字符串初始化日期，格式请用：yyyy-MM-dd HH:mm
         mTimerPicker = new CustomDatePicker(this, new CustomDatePicker.Callback() {
             @Override
-            public void onTimeSelected(long timestamp) {
-                mTvSelectedTime.setText(DateFormatUtils.long2Str(timestamp, true));
+            public void onTimeSelected(Calendar timestamp) {
+                mTvTimestamp = timestamp;
+                mTvSelectedTime.setText(DateFormatUtils.formatDateInfo(timestamp));
             }
         }, beginTime, endTime);
         // 允许点击屏幕或物理返回键关闭
@@ -93,5 +101,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 允许滚动动画
         mTimerPicker.setCanShowAnim(true);
     }
-
 }

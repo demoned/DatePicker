@@ -76,11 +76,35 @@ public class DateFormatUtils {
     public static String formatDateInfo(Calendar timestamp) {
         int year = timestamp.get(Calendar.YEAR);
         int month = timestamp.get(Calendar.MONTH) + 1;
+        String months = "";
+        if (month < 10) {
+            months = "0" + month;
+        } else {
+            months = "" + month;
+        }
         int date = timestamp.get(Calendar.DAY_OF_MONTH);
+        String dates = "";
+        if (date < 10) {
+            dates = "0" + date;
+        } else {
+            dates = "" + date;
+        }
         int week = timestamp.get(Calendar.DAY_OF_WEEK);
         int hour = timestamp.get(Calendar.HOUR_OF_DAY);
+        String hours = "";
+        if (hour < 10) {
+            hours = "0" + hour;
+        } else {
+            hours = "" + hour;
+        }
         int minute = timestamp.get(Calendar.MINUTE);
-        return year + "/" + month + "/" + date + " " + DateFormatUtils.formatWeekInfo(week) + " " + hour + ":" + minute;
+        String minutes = "";
+        if (minute < 10) {
+            minutes = "0" + minute;
+        } else {
+            minutes = "" + minute;
+        }
+        return year + "/" + months + "/" + dates + " " + DateFormatUtils.formatWeekInfo(week) + " " + hours + ":" + minutes;
     }
 
     public static String getTime() {
@@ -89,13 +113,24 @@ public class DateFormatUtils {
         return format.format(d1);
     }
 
+    public static String getNowTimTime() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+        Date d1 = new Date();
+        return format.format(d1);
+    }
+
+    public static String getTimeByCalendar(Calendar calendar) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+        return format.format(calendar.getTime());
+    }
+
     public static String getYear(int i) {
         Date date = new Date();// 取时间
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(date);
         calendar.add(Calendar.YEAR, i);// 把日期往后增加一年.整数往后推,负数往前移动
         date = calendar.getTime();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         return format.format(date);
     }
 
@@ -105,7 +140,7 @@ public class DateFormatUtils {
         calendar.setTime(date);
         calendar.add(Calendar.MONTH, i);// 把日期往后增加一年.整数往后推,负数往前移动
         date = calendar.getTime();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         return format.format(date);
     }
 }

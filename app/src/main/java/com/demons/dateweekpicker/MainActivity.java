@@ -34,12 +34,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.ll_date:
                 // 日期格式为yyyy-MM-dd
-                mDatePicker.show(mTimestamp.getTimeInMillis());
+                mDatePicker.show(DateFormatUtils.str2Long(DateFormatUtils.getTimeByCalendar(mTimestamp), false));
                 break;
 
             case R.id.ll_time:
                 // 日期格式为yyyy-MM-dd HH:mm
-                mTimerPicker.show(mTvTimestamp.getTimeInMillis());
+                mTimerPicker.show(DateFormatUtils.str2Long(DateFormatUtils.getTimeByCalendar(mTimestamp), false));
                 break;
         }
     }
@@ -53,10 +53,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Calendar mTimestamp = Calendar.getInstance();
 
     private void initDatePicker() {
-        String beginTime = DateFormatUtils.getMonth(-1);
-        String endTime = DateFormatUtils.getYear(2);
 
-        mTvSelectedDate.setText(DateFormatUtils.formatDateInfo(Calendar.getInstance()));
+        long beginTime = DateFormatUtils.str2Long(DateFormatUtils.getYear(-2), false);
+        long endTime = DateFormatUtils.str2Long(DateFormatUtils.getYear(2), false);
+
+        mTvSelectedDate.setText(DateFormatUtils.formatDateInfo(mTimestamp));
 
         // 通过时间戳初始化日期，毫秒级别
         mDatePicker = new CustomDatePicker(this, new CustomDatePicker.Callback() {
@@ -80,10 +81,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initTimerPicker() {
 
-        String beginTime = DateFormatUtils.getMonth(-1);
-        String endTime = DateFormatUtils.getYear(2);
 
-        mTvSelectedTime.setText(DateFormatUtils.formatDateInfo(Calendar.getInstance()));
+        long beginTime = DateFormatUtils.str2Long(DateFormatUtils.getYear(-2), false);
+        long endTime = DateFormatUtils.str2Long(DateFormatUtils.getYear(2), false);
+
+        mTvSelectedTime.setText(DateFormatUtils.formatDateInfo(mTimestamp));
         // 通过日期字符串初始化日期，格式请用：yyyy-MM-dd HH:mm
         mTimerPicker = new CustomDatePicker(this, new CustomDatePicker.Callback() {
             @Override
